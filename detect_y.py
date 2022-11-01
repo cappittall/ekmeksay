@@ -36,44 +36,23 @@ from utils import utils
 from utils.sort import Sort
 import os
 import threading
-from datetime import datetime 
-import locale
-locale.setlocale(locale.LC_ALL, '')
-
 
 CSS_STYLES = str(svg.CssStyle({'.back': svg.Style(fill='black',stroke='black', stroke_width='0.5em'),\
     '.big': svg.Style(font_size='3em'),\
         '.big2': svg.Style(font_size='2em'),\
             'small': svg.Style(font_size='0.25em'),\
-              'large': svg.Style(font_weight=900, font_size= '1.5em'),\
-                '.bbox': svg.Style(fill_opacity=0.0, stroke_width='0.2em')}))
+                '.bbox': svg.Style(fill_opacity=0.0, stroke_width='0.1em')}))
 
-counter = [0,0,0,0,0,0,0,0]
+counter = [0,0,0,0,0,0,0]
 counted_ids = [0 for i in range(100)]
 filenames = '/home/mendel/files/files.csv'
 
-ekmekler = []
-cesits={}
-#deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
-ndx=0
-#son calisilan dosya
 with open(filenames, 'r') as f:
-    #son dosya adi ve remove  \n
-    counter[5]= f.readlines()[-1][:-1] 
-    print(counter[5])
+    #son dosya adi
+    counter[5]= f.readlines()[-1]
 
-#Son toplami dosyadan al
-with open (counter[5], 'r') as g:
-    print('acilan dosya adi', counter[5])
-    #10/06/2022 11:02
-    
-    for line in g.readlines():
-        linelist= line.split(',')
-        ckey = linelist[1]
-        if ckey not in cesits: cesits[ckey]=0
-        cesits[ckey] += int(linelist[3])
-    counter[4] = int(linelist[-1])
-    print('counter <<<4>>>', counter[4])
+with open(counter[5], 'r') as f:
+    counter[4] = int(f.readlines()[-1].split(',')[-1])
 
 def size_em(length):
     return '%sem' % str(0.6 * (length + 1))
@@ -97,7 +76,7 @@ def make_get_color(color, labels):
 def sendemails():
     os.system('. mail')
 
-def writetocsv():
+def writetocsv(counter):
     if counter[3] > 0:  ## At least should be 1 bread in 1 min
         counter[0] = time.strftime("%d/%m/%Y %H:%M")
 
@@ -105,10 +84,14 @@ def writetocsv():
             #'/home/mendel/besas_' + counter[0][:10].replace('/', '') + '.csv', 'a') as ff:
             wr = writer(ff)
             wr.writerow(counter[:5])
+
+        #if time.strftime("%H:%M")== "00:00": 
+        #    counter[4] = 0
+        # reset 1 min count
         counter[3]=0
         
 # def overlay(title, objs, get_color, labels, inference_time, inference_rate, layout):
-def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, trend, sifirla, modelim ):
+def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, trend, sifirla ):
     x0, y0, width, height = layout.window
     font_size = 0.02 * height
     if time.time()>counter[6]: counter[6]=0
@@ -127,35 +110,14 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
     #if (np.array(trdata)).size: #  and counter[6] ==0:
     for td in trdata:
         #print(trdata)
-        x0_, y0_, x1_, y1_, trackID, score, labelid = td[0].item(), td[1].item(), td[2].item(), td[3].item(), td[4].item(), td[5].item(), td[6].item()
+        x0_, y0_, x1_, y1_, trackID, score = td[0].item(), td[1].item(), td[2].item(), td[3].item(), td[4].item(), td[5].item()
 
         inference_width, inference_height = layout.inference_size
         scale_x, scale_y = 1.0 / inference_width, 1.0 / inference_height
         sx, sy =  scale_x*layout.size[0], scale_y*layout.size[1]
         x, y, w, h = x0_*sx, y0_*sy, (x1_-x0_)*sx, (y1_-y0_)*sy
 
-        colorm = 'green' if labelid == 0.0 else 'yellow'
-
-        if y + int(h) > roi_y and y + int(h) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
-            counter[4] += 1
-            counter[3] += 1
-            if counter[1] not in cesits: cesits[counter[1]] = 0
-            cesits[counter[1]] += 1 
-            counted_ids.append(trackID)
-            counted_ids.pop(0)
-
-        elif counter[7] < time.time() - (60*2)  and labelid == 1.0:
-            ekmekler.rotate(-1)
-            counter[1]= ekmekler[ndx]
-            if counter[1] not in cesits: cesits[counter[1]] = 0
-            counted_ids.append(trackID)
-            counted_ids.pop(0)
-            threading.Thread(target=writetocsv, args=()).start()
-            counter[7] = time.time()
-            threading.Thread(target=sendemails, args=()).start()
-
-
-        doc += svg.Rect(x=x, y=y, width=w, height=h, style='stroke:%s' % colorm, _class='bbox')
+        doc += svg.Rect(x=x, y=y, width=w, height=h, style='stroke:%s' % 'green', _class='bbox')
 
         t = svg.Text(x=x, y=y+5, fill='white')
         t += svg.TSpan(str(int(trackID)), dy='1em')
@@ -163,6 +125,14 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         t = svg.Text(x=x, y=y+h-20, fill='white')
         t += svg.TSpan(str(int(score*100))+'%', dy='1em')
         doc += t
+
+        ## Count the objs
+
+        if y + int(h) > roi_y and y + int(h) < roi_y * 1.015 and trackID not in counted_ids:
+            counter[4] += 1
+            counter[3] += 1
+            counted_ids.append(trackID)
+            counted_ids.pop(0)
 
     #Draw 2 line horizantol or vertical due to axis.
     if axis:
@@ -173,31 +143,24 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         #doc += svg.Line(x1=roi_x*1.1, y1=0, x2=roi_x*1.1, y2=width, style="stroke:rgb(255,0,0);stroke-width:2")
 
     if int(time.strftime("%M")) % 5  ==0  and counter[0] != time.strftime("%d/%m/%Y %H:%M"):
-        threading.Thread(target=writetocsv, args=()).start()
-        # writetocsv(counter)
+        writetocsv(counter)
 
     ox = x0 + 20
     oy1, oy2 = y0 + 20 + font_size, y0 + height -20
     # Title 
-    title = 'Toplam uretim {value:,} {val:}'.format(value= counter[4], val=' Sifirliyor!..' if sifirla else '')
+    title = '{} sayısı {} {}'.format(counter[1], counter[4], ' Sifirliyor!..' if sifirla else '')
     doc += svg.Rect(x=0, y=0, width=size_em(len(title)+30), height='2em',
                         transform='translate(%s, %s) scale(1,-1)' % (ox, oy1), _class='big2')
     doc += svg.Text(title, x=ox, y=oy1, fill='white', _class='big2' )
-    for keycesit in cesits:
-        oy1 += 30
-        doc += svg.Text(keycesit, x=width*0.55, y= oy1, fill='yellow', _class='large')
-        doc += svg.Text(': {val:,}'.format(val=cesits[keycesit]), x=0.8*width, y=oy1, fill='yellow', _class='large')
-
-
 
     '''
     doc += svg.Rect(x=0, y=0, width=size_em(len(counter[1])), height='4em',
                         transform='translate(%s, %s) scale(1,-1)' % (ox+100, oy1+200), _class='back')
     '''        
                     
-    doc += svg.Text(counter[1], x=ox+150, y=oy1+200, fill='red', _class='big')
+    doc += svg.Text(counter[1], x=ox+100, y=oy1+200, fill='red', _class='big')
     # Info
-    line = 'Satirda bulunan:%d,  Inf. time %.2f ms (%.2f fps)(Track time: %.2f) %s model: %s' % (len(trdata), inference_time * 1000, 1.0 / inference_time, trend * 1000, counter[5].split('/')[-1], modelim  )
+    line = 'Satirda bulunan:%d,  Inf. time %.2f ms (%.2f fps)(Track time: %.2f) %s' % (len(trdata), inference_time * 1000, 1.0 / inference_time, trend * 1000, counter[5])
     y = oy2 #- 1.7 * font_size
     doc += svg.Rect(x=0, y=0, width=size_em(len(line)), height='1em',
                        transform='translate(%s, %s) scale(1,-1)' % (ox, y), _class='back')
@@ -211,8 +174,6 @@ def print_results(inference_rate, objs):
         print('    %d: %s, area=%.2f' % (i, obj, obj.bbox.area))
 
 def render_gen(args):
-    global counter, ekmekler, ndx
-
     fps_counter  = utils.avg_fps_counter(30)
 
     interpreters, titles = utils.make_interpreters(args.model)
@@ -233,8 +194,9 @@ def render_gen(args):
     
 
     fno = args.firinno[-2:]
-    ekmekler= deque([i[:-1] for i in open('/home/mendel/ekmekler%s.txt'%fno, 'r') .readlines()])
+    ekmekler = deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
     ndx = ekmekler.index(args.ekmek)
+        
     counter[1] = ekmekler[ndx]
     counter[2] = args.firinno
     ##
@@ -287,9 +249,10 @@ def render_gen(args):
                 objs = [obj for obj in objs \
                     if args.min_area <= obj.bbox.scale(1.0 / width, 1.0 / height).area <= args.max_area]
 
-                detections = np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score, obj.id] for obj in objs ]) if len(objs)>0 else np.empty((0,7))
+                
+                detections = np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score] for obj in objs ]) if len(objs)>0 else np.empty((0,6))
             else:
-                detections = np.empty((0,7))
+                detections = np.empty((0,6))
             
             #Adding to the tracking object
             # detections = [[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score] for obj in objs]
@@ -309,7 +272,7 @@ def render_gen(args):
             trdata = tracker.update(detections)
             trstart = time.monotonic()
             #draw the boxes with tracking data(trdata)
-            output = overlay(layout, objs, trdata, args.axis, args.roi, inference_time, inference_rate, trend, sifirla, args.model.split('/')[-1])
+            output = overlay(layout, objs, trdata, args.axis, args.roi, inference_time, inference_rate, trend, sifirla)
             trend = time.monotonic()-trstart
         else:
             output = None
@@ -317,7 +280,7 @@ def render_gen(args):
         if sifirla:
         #if int(time.strftime("%M")) % 1  ==0  and counter[0] != time.strftime("%d/%m/%Y %H:%M"):
             if not mailgitti:
-                threading.Thread(target=writetocsv, args=()).start()
+                writetocsv(counter)
                 threading.Thread(target=sendemails, args=()).start()
                 mailgitti=True
                 datenow = time.strftime('%d%m_%H%M')
@@ -330,7 +293,6 @@ def render_gen(args):
 
 
             counter[4] = 0
-            cesits={}
         else: mailgitti = False
        
 
@@ -344,7 +306,14 @@ def render_gen(args):
         if btn_up.read():
             ekmekler.rotate(1)
             counter[1] = ekmekler[ndx]
-            if counter[1] not in cesits: cesits[counter[1]]=0            
+            counter[4] = 0
+
+        # sayaci sifirla
+        #if btn_down.read(): 
+        #    ekmekler.rotate(1)
+        #    counter[1] = ekmekler[ndx]
+        #    counter[4] = 0
+            
     
     ## Close the lights ##
     led.write(False)
@@ -363,7 +332,7 @@ def add_render_gen_args(parser):
                         help='Max number of objects to detect')
     parser.add_argument('--threshold', type=float, default=0.4,
                         help='Detection threshold')
-    parser.add_argument('--min_area', type=float, default=0.00005, #0.0015,
+    parser.add_argument('--min_area', type=float, default=0.0015,
                         help='Min bounding box area')
     parser.add_argument('--max_area', type=float, default=0.005,
                         help='Max bounding box area')

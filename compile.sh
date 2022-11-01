@@ -1,19 +1,14 @@
 #!/bin/sh
 
 ## Update files from github
-# sudo rm -r *.pyc
-# git fetch
-# git merge --hard origin/master
-git pull
+sudo rm -r *.pyc
+
 
 ## Compile all files
-# python3 -m compileall .
+python3 -m compileall .
 ## convert all files name 
-# python3 renames.py 
-
-## Remove the current files before copying  
-#sudo rm -r *.py
+python3 renames.py 
 
 ## Copy file from __pycache__ 
-#sudo cp -rp ./__pycache__/*.* ./
+sudo cp -rp ./__pycache__/*.*  ../ekmeksay
 #sudo rm -r __pycache__
