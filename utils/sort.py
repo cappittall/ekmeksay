@@ -115,8 +115,6 @@ class KalmanBoxTracker(object):
     self.time_since_update = 0
     self.id = KalmanBoxTracker.count
     self.score = bbox[4]
-    self.labelid = bbox[5]
-
     KalmanBoxTracker.count += 1
     if KalmanBoxTracker.count== 1000: KalmanBoxTracker.count=0
     self.history = []
@@ -134,7 +132,6 @@ class KalmanBoxTracker(object):
     self.hit_streak += 1
     self.kf.update(convert_bbox_to_z(bbox))
     self.score = bbox[4]
-    self.labelid = bbox[5]
 
   def predict(self):
     """
@@ -213,7 +210,7 @@ class Sort(object):
     self.trackers = []
     self.frame_count = 0
 
-  def update(self, dets=np.empty((0, 7))):
+  def update(self, dets=np.empty((0, 6))):
     """
     Params:
       dets - a numpy array of detections in the format [[x1,y1,x2,y2,score],[x1,y1,x2,y2,score],...]
@@ -250,7 +247,7 @@ class Sort(object):
         d = trk.get_state()[0]
         if (trk.time_since_update <=self.max_age) and (trk.hits >= self.min_hits or self.frame_count <= self.min_hits):
         #if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
-          ret.append(np.concatenate((d,[trk.id+1],[trk.score],[trk.labelid])).reshape(1,-1)) # +1 as MOT benchmark requires positive
+          ret.append(np.concatenate((d,[trk.id+1],[trk.score])).reshape(1,-1)) # +1 as MOT benchmark requires positive
         i -= 1
         # remove dead tracklet
         if(trk.time_since_update > self.max_age):
@@ -335,3 +332,4 @@ if __name__ == '__main__':
 
   if(display):
     print("Note: to get real runtime results run without the option: --display")
+    
