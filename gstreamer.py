@@ -49,7 +49,7 @@ from PIL import Image
 
 from pipelines import *
 
-COMMAND_SAVE_FRAME = ' '
+COMMAND_SAVE_FRAME = 's'
 COMMAND_PRINT_INFO = 'p'
 COMMAND_QUIT       = 'q'
 WINDOW_TITLE       = 'Coral'
@@ -127,11 +127,12 @@ def Worker(process, maxsize=0):
 def save_frame(rgb, size, overlay=None, ext='png'):
     tag = '%010d' % int(time.monotonic() * 1000)
     img = Image.frombytes('RGB', size, rgb, 'raw')
-    name = 'img-%s.%s' % (tag, ext)
+    yol = '/home/mendel/images'
+    name = '%s/img-%s.%s' % (yol, tag, ext)
     img.save(name)
     print('Frame saved as "%s"' % name)
     if overlay:
-        name = 'img-%s.svg' % tag
+        name = '%s/img-%s.svg' % (yol,tag)
         with open(name, 'w') as f:
             f.write(overlay)
         print('Overlay saved as "%s"' % name)

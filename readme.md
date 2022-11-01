@@ -11,10 +11,7 @@
 
 4. cddd, cdddx ve baslat dosyalarını düzelt
 
-
-
-
-
+5. yenile.sh diye dosya oluştur.
 
 
 
