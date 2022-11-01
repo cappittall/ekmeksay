@@ -105,10 +105,6 @@ def writetocsv():
             #'/home/mendel/besas_' + counter[0][:10].replace('/', '') + '.csv', 'a') as ff:
             wr = writer(ff)
             wr.writerow(counter[:5])
-
-        #if time.strftime("%H:%M")== "00:00": 
-        #    counter[4] = 0
-        # reset 1 min count
         counter[3]=0
         
 # def overlay(title, objs, get_color, labels, inference_time, inference_rate, layout):
@@ -334,6 +330,7 @@ def render_gen(args):
 
 
             counter[4] = 0
+            cesits={}
         else: mailgitti = False
        
 
@@ -347,15 +344,7 @@ def render_gen(args):
         if btn_up.read():
             ekmekler.rotate(1)
             counter[1] = ekmekler[ndx]
-            if counter[1] not in cesits: cesits[counter[1]]=0
-            #counter[4] = 0
-
-        # sayaci sifirla
-        #if btn_down.read(): 
-        #    ekmekler.rotate(1)
-        #    counter[1] = ekmekler[ndx]
-        #    counter[4] = 0
-            
+            if counter[1] not in cesits: cesits[counter[1]]=0            
     
     ## Close the lights ##
     led.write(False)
