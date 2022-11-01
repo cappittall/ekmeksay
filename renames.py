@@ -6,6 +6,6 @@ for file in os.listdir():
         newfile = file.replace('.cpython-310', '')
         print('detect' in file)
         os.rename(file, newfile)
-for file in ['main.pyc','detect.pyc', 'mail.pyc']:
-    os.rename(file, file.replace('.pyc', 'py') )
+for file in ['detect.pyc']:
+    os.rename(file, file.replace('.pyc', '.py') )
 os.chdir('..')

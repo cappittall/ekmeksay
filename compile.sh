@@ -2,8 +2,8 @@
 
 ## Update files from github
 sudo rm -r *.pyc
-git fetch --all
-git reset --hard origin/master
+git fetch
+git merge origin/$CURRENT_BRANCH
 
 ## Compile all files
 python3 -m compileall .
