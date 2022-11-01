@@ -4,7 +4,7 @@
     10,11. satıları aşağıdaki gibi değiştir: 
     10 WorkingDirectory=/home/mendel/ekmeksay
     11 ExecStart=/usr/bin/python3 /home/mendel/ekmeksay/main.py
-   
+
 2. main.py, detect.py, gstreamer.py dosyalarını mail ile gönder ve github a kopyala.
 
 3. main.py içeriğini değiştir. 
