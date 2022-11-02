@@ -361,7 +361,7 @@ def add_render_gen_args(parser):
                         help='labels file path')
     parser.add_argument('--top_k', type=int, default=50,
                         help='Max number of objects to detect')
-    parser.add_argument('--threshold', type=float, default=0.4,
+    parser.add_argument('--threshold', type=float, default=0.5,
                         help='Detection threshold')
     parser.add_argument('--min_area', type=float, default=0.00005, #0.0015,
                         help='Min bounding box area')
