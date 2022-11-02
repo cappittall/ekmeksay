@@ -277,8 +277,8 @@ def render_gen(args):
                 roi_y = y0 * args.roi 
                 # roi_x = x0 * args.roi 
                 
-                objs =[obj for obj in objs if obj.bbox.ymax >= roi_y*0.95 and 
-                                              obj.bbox.ymin <= roi_y*1.05]
+                objs =[obj for obj in objs if obj.bbox.ymax >= roi_y*0.90 and 
+                                              obj.bbox.ymin <= roi_y*1.0]
 
 
                 #objsss= len([obj for obj in objs if obj.bbox.ymax > roi_y * 0.95]) 
