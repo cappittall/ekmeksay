@@ -136,7 +136,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
 
         colorm = 'green' if labelid == 0.0 else 'yellow'
 
-        if y + int(h) > roi_y and y + int(h) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
+        if y  > roi_y and y < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
             counter[4] += 1
             counter[3] += 1
             if counter[1] not in cesits: cesits[counter[1]] = 0
@@ -179,7 +179,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
     ox = x0 + 20
     oy1, oy2 = y0 + 20 + font_size, y0 + height -20
     # Title 
-    title = 'Toplam {turu:} {value:,} {val:}'.format(turu=counter[1], value=cesits[counter[1]], val=' Sifirliyor!..' if sifirla else '')
+    title = 'Toplam {turu:} {value:,} {val:}'.format(turu=counter[1], value= [counter[1]], val=' Sifirliyor!..' if sifirla else '')
     doc += svg.Rect(x=0, y=0, width=size_em(len(title)+30), height='2em',
                         transform='translate(%s, %s) scale(1,-1)' % (ox, oy1), _class='big2')
     doc += svg.Text(title, x=ox, y=oy1, fill='white', _class='big2' )
