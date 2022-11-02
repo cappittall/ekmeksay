@@ -274,7 +274,7 @@ def render_gen(args):
                 ccc=0
                 
                 x0, y0 = layout.inference_size
-                roi_y = y0 * args.roi *.85
+                roi_y = y0 * args.roi 
                 # roi_x = x0 * args.roi 
                 
                 objs =[obj for obj in objs if obj.bbox.ymax >= roi_y*0.95 and 
