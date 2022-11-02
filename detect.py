@@ -45,7 +45,7 @@ CSS_STYLES = str(svg.CssStyle({'.back': svg.Style(fill='black',stroke='black', s
     '.big': svg.Style(font_size='3em'),\
         '.big2': svg.Style(font_size='2em'),\
             '.small': svg.Style(font_size='0.25em'),\
-              '.large': svg.Style(font_size= '1em'),\
+              '.large': svg.Style(font_size='2em'),\
                 '.bbox': svg.Style(fill_opacity=0.0, stroke_width='0.2em')}))
 
 counter = [0,0,0,0,0,0,0,0]
