@@ -45,7 +45,7 @@ CSS_STYLES = str(svg.CssStyle({'.back': svg.Style(fill='black',stroke='black', s
     '.big': svg.Style(font_size='3em'),\
         '.big2': svg.Style(font_size='2em'),\
             '.small': svg.Style(font_size='0.25em'),\
-              '.large': svg.Style(font_size='2em'),\
+              '.large': svg.Style(font_size='1em'),\
                 '.bbox': svg.Style(fill_opacity=0.0, stroke_width='0.2em')}))
 
 counter = [0,0,0,0,0,0,0,0]
@@ -185,8 +185,8 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
     doc += svg.Text(title, x=ox, y=oy1, fill='white', _class='big2' )
     for keycesit in cesits:
         oy1 += 30
-        doc += svg.Text(keycesit, x=width*0.55, y= oy1, fill='white', _class='large')
-        doc += svg.Text(': {val:,}'.format(val=cesits[keycesit]), x=0.8*width, y=oy1, fill='white', _class='large')
+        doc += svg.Text(keycesit, x=width*0.55, y= oy1, fill='yellow', _class='large')
+        doc += svg.Text(': {val:,}'.format(val=cesits[keycesit]), x=0.8*width, y=oy1, fill='yellow', _class='large')
 
 
 
