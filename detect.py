@@ -211,7 +211,7 @@ def print_results(inference_rate, objs):
         print('    %d: %s, area=%.2f' % (i, obj, obj.bbox.area))
 
 def render_gen(args):
-    global counter, ekmekler, ndx
+    global counter, ekmekler, ndx, cesits
 
     fps_counter  = utils.avg_fps_counter(30)
 
@@ -329,9 +329,8 @@ def render_gen(args):
                     wr = writer(ff)
                     wr.writerow([counter[5]])
 
-
-            counter[4] = 0
             cesits={}
+            counter[4] = 0
         else: mailgitti = False
        
 
