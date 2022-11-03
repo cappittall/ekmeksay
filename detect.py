@@ -187,14 +187,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         oy1 += 30
         doc += svg.Text(keycesit, x=width*0.55, y= oy1, fill='yellow', _class='large')
         doc += svg.Text(': {val:,}'.format(val=cesits[keycesit]), x=0.8*width, y=oy1, fill='yellow', _class='large')
-
-
-
-    '''
-    doc += svg.Rect(x=0, y=0, width=size_em(len(counter[1])), height='4em',
-                        transform='translate(%s, %s) scale(1,-1)' % (ox+100, oy1+200), _class='back')
-    '''        
-                    
+            
     doc += svg.Text(counter[1], x=ox+150, y=oy1+200, fill='red', _class='big')
     # Info
     line = 'Satirda bulunan:%d,  Inf. time %.2f ms (%.2f fps)(Track time: %.2f) %s model: %s' % (len(trdata), inference_time * 1000, 1.0 / inference_time, trend * 1000, counter[5].split('/')[-1], modelim  )
@@ -237,6 +230,8 @@ def render_gen(args):
     ndx = ekmekler.index(args.ekmek)
     counter[1] = ekmekler[ndx]
     counter[2] = args.firinno
+    if counter[1] not in cesits:
+        cesits[counter[1]]=0
     ##
 
 
