@@ -216,7 +216,7 @@ def render_gen(args):
 
     
     #racker = objectOfTracker.trackerObject.mot_tracker
-    tracker = Sort(max_age=30, min_hits=0, iou_threshold=.30)
+    tracker = Sort(max_age=20, min_hits=0, iou_threshold=.30)
 
     
     led = GPIO("/dev/gpiochip2", 13, "out")  # pin 37
@@ -274,7 +274,7 @@ def render_gen(args):
                 # roi_x = x0 * args.roi 
                 
                 objs =[obj for obj in objs if obj.bbox.ymax >= roi_y*0.90 and 
-                                              obj.bbox.ymin <= roi_y*1.0]
+                                              obj.bbox.ymin <= roi_y*0.95 ]
 
 
                 #objsss= len([obj for obj in objs if obj.bbox.ymax > roi_y * 0.95]) 
