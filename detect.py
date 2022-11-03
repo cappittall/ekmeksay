@@ -179,6 +179,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
     ox = x0 + 20
     oy1, oy2 = y0 + 20 + font_size, y0 + height -20
     # Title 
+    if counter[1] not in cesits: cesits[counter[1]]=0
     title = 'Toplam {turu} {value:,} {val:}'.format(turu=counter[1], value= cesits[counter[1]], val=' Sifirliyor!..' if sifirla else '')
     doc += svg.Rect(x=0, y=0, width=size_em(len(title)+30), height='2em',
                         transform='translate(%s, %s) scale(1,-1)' % (ox, oy1), _class='big2')
@@ -230,8 +231,8 @@ def render_gen(args):
     ndx = ekmekler.index(args.ekmek)
     counter[1] = ekmekler[ndx]
     counter[2] = args.firinno
-    if counter[1] not in cesits:
-        cesits[counter[1]]=0
+    if counter[1] not in cesits: cesits[counter[1]]=0
+    
     ##
 
 
@@ -287,21 +288,6 @@ def render_gen(args):
             else:
                 detections = np.empty((0,7))
             
-            #Adding to the tracking object
-            # detections = [[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score] for obj in objs]
-            '''
-            detections = []
-
-            for n in range(0, len(objs)):
-                element = [] 
-                element.append(objs[n].bbox.xmin)
-                element.append(objs[n].bbox.ymin)
-                element.append(objs[n].bbox.xmax)
-                element.append(objs[n].bbox.ymax)
-                element.append(objs[n].score)  
-                detections.append(element) 
-            '''
-
             trdata = tracker.update(detections)
             trstart = time.monotonic()
             #draw the boxes with tracking data(trdata)
