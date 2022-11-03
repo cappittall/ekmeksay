@@ -328,11 +328,10 @@ def render_gen(args):
                 with open(filenames, 'a') as ff:
                     wr = writer(ff)
                     wr.writerow([counter[5]])
-                
-                with open(counter[5], 'a') as fn:
-                    wr = writer(fn)
-                    wr.writerow(['Tarih-Saat', 'Ekmek Türü', 'Fırın no','Son 5 dk', 'Toplam' ])
-
+                counter[3]=0
+                counter[4]=0
+                threading.Thread(target=writetocsv, args=()).start()
+            
             cesits={}
             counter[4] = 0
         else: mailgitti = False
