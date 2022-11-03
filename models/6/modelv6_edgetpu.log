@@ -1,0 +1,28 @@
+Edge TPU Compiler version 16.0.384591198
+Input: /content/drive/MyDrive/aidata/besas/all-images/all//modelv9.tflite
+Output: /content/drive/MyDrive/aidata/besas/all-images/all/modelv9_edgetpu.tflite
+
+Operator                       Count      Status
+
+LOGISTIC                       5          More than one subgraph is not supported
+LOGISTIC                       11         Mapped to Edge TPU
+LOGISTIC                       1          Operation is otherwise supported, but not mapped due to some unspecified limitation
+MAX_POOL_2D                    9          More than one subgraph is not supported
+MAX_POOL_2D                    6          Mapped to Edge TPU
+CUSTOM                         1          Operation is working on an unsupported data type
+CONCATENATION                  2          Operation is otherwise supported, but not mapped due to some unspecified limitation
+CONV_2D                        26         More than one subgraph is not supported
+CONV_2D                        63         Mapped to Edge TPU
+MUL                            10         Mapped to Edge TPU
+MUL                            6          More than one subgraph is not supported
+REDUCE_MAX                     3          Mapped to Edge TPU
+REDUCE_MAX                     5          More than one subgraph is not supported
+ADD                            12         Mapped to Edge TPU
+ADD                            19         More than one subgraph is not supported
+RESHAPE                        36         Tensor has unsupported rank (up to 3 innermost dimensions mapped)
+RESHAPE                        9          More than one subgraph is not supported
+RESHAPE                        1          Operation is otherwise supported, but not mapped due to some unspecified limitation
+PACK                           24         Tensor has unsupported rank (up to 3 innermost dimensions mapped)
+MEAN                           8          Mapped to Edge TPU
+DEPTHWISE_CONV_2D              19         Mapped to Edge TPU
+DEPTHWISE_CONV_2D              26         More than one subgraph is not supported
