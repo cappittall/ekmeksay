@@ -144,7 +144,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
             counted_ids.append(trackID)
             counted_ids.pop(0)
 
-        elif counter[7] < time.time() - (60*2)  and labelid == 1.0:
+        elif counter[7] < time.time() - (60)  and labelid == 1.0:
             ekmekler.rotate(-1)
             counter[1]= ekmekler[ndx]
             if counter[1] not in cesits: cesits[counter[1]] = 0
