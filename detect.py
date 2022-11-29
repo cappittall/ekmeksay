@@ -57,23 +57,31 @@ cesits={}
 #deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
 ndx=0
 #son calisilan dosya
-with open(filenames, 'r') as f:
-    #son dosya adi ve remove  \n
-    counter[5]= f.readlines()[-1][:-1] 
-    print(counter[5])
-
-#Son toplami dosyadan al
-with open (counter[5], 'r') as g:
-    print('acilan dosya adi', counter[5])
-    #10/06/2022 11:02
+try:
+    with open(filenames, 'r') as f:
+        #son dosya adi ve remove  \n
+        counter[5]= f.readlines()[-1][:-1]
+        print(counter[5])
+except:
+    print('Hata oldu files dosyasını okuyamamadı')
     
-    for line in g.readlines():
-        linelist= line.split(',')
-        ckey = linelist[1]
-        if ckey not in cesits: cesits[ckey]=0
-        cesits[ckey] += int(linelist[3])
-    counter[4] = int(linelist[-1])
-    print('counter <<<4>>>', counter[4])
+try:
+    #Son toplami dosyadan al
+    with open (counter[5], 'r') as g:
+        print('acilan dosya adi', counter[5])
+        #10/06/2022 11:02
+        
+        for line in g.readlines():
+            linelist= line.split(',')
+            ckey = linelist[1]
+            if ckey not in cesits: cesits[ckey]=0
+            cesits[ckey] += int(linelist[3])
+        counter[4] = int(linelist[-1])
+        print('counter <<<4>>>', counter[4])
+except:
+    datenow = time.strftime('%d%m_%H%M')
+    counter[5] = '/home/mendel/files/b%s_%04d.csv' % (datenow, 1)
+
 
 def size_em(length):
     return '%sem' % str(0.6 * (length + 1))
