@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "AYARLAMALARI TAMAMLIYORUM"
+sudo cp /home/mendel/ekmeksay/main.py /home/mendel/
+sudo cp /home/mendel/ekmeksay/ayarla /usr/bin/
