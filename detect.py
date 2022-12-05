@@ -92,16 +92,6 @@ def color(i, total):
 def make_palette(keys):
     return {key : svg.rgb(color(i, len(keys))) for i, key in enumerate(keys)}
 
-def make_get_color(color, labels):
-    if color:
-        return lambda obj_id: color
-
-    if labels:
-        palette = make_palette(labels.keys())
-        return lambda obj_id: palette[obj_id]
-
-    return lambda obj_id: 'white'
-
 def sendemails():
     os.system('. mail')
 
@@ -141,9 +131,9 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         sx, sy =  scale_x*layout.size[0], scale_y*layout.size[1]
         x, y, w, h = x0_*sx, y0_*sy, (x1_-x0_)*sx, (y1_-y0_)*sy
 
-        colorm = 'green' if labelid == 1.0 else 'yellow'
+        colorm = 'green' if labelid == 0.0 else 'yellow'
 
-        if y+int(h/2)  > roi_y and y+int(h/2) < roi_y * 1.015 and trackID not in counted_ids and labelid == 1.0 :
+        if y+int(h/2)  > roi_y and y+int(h/2) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
             counter[4] += 1
             counter[3] += 1
             if counter[1] not in cesits: cesits[counter[1]] = 0
@@ -151,7 +141,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
             counted_ids.append(trackID)
             counted_ids.pop(0)
 
-        elif counter[7] < time.time() - (60)  and labelid == 0.0:
+        elif counter[7] < time.time() - (60)  and labelid == 1.0:
             ekmekler.rotate(-1)
             counter[1]= ekmekler[ndx]
             if counter[1] not in cesits: cesits[counter[1]] = 0
@@ -241,6 +231,9 @@ def render_gen(args):
     if counter[1] not in cesits: cesits[counter[1]]=0
     
     ##
+
+
+
 
     draw_overlay = True
     
