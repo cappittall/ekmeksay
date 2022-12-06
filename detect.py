@@ -56,7 +56,7 @@ ekmekler = []
 cesits={}
 #deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
 ndx=0
-#son calisilan dosya
+#get latest file from disk
 try:
     with open(filenames, 'r') as f:
         #son dosya adi ve remove  \n
