@@ -134,7 +134,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
 
         colorm = 'green' if labelid == 0.0 else 'yellow'
 
-        if y+int(h/2)  > roi_y and y+int(h/2) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
+        if y+int(h)  > roi_y and y+int(h) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
             counter[4] += 1
             counter[3] += 1
             if counter[1] not in cesits: cesits[counter[1]] = 0
