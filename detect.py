@@ -56,6 +56,7 @@ ekmekler = []
 cesits={}
 #deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
 ndx=0
+
 #get latest file from disk
 try:
     with open(filenames, 'r') as f:
@@ -95,7 +96,7 @@ def make_palette(keys):
 def sendemails():
     os.system('. mail')
 
-def writetocsv():
+def write_to_csv():
     if counter[3] > 0:  ## At least should be 1 bread in 1 min
         counter[0] = time.strftime("%d/%m/%Y %H:%M")
 
@@ -147,7 +148,7 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
             if counter[1] not in cesits: cesits[counter[1]] = 0
             counted_ids.append(trackID)
             counted_ids.pop(0)
-            threading.Thread(target=writetocsv, args=()).start()
+            threading.Thread(target=write_to_csv, args=()).start()
             counter[7] = time.time()
             threading.Thread(target=sendemails, args=()).start()
 
@@ -170,8 +171,8 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         #doc += svg.Line(x1=roi_x*1.1, y1=0, x2=roi_x*1.1, y2=width, style="stroke:rgb(255,0,0);stroke-width:2")
 
     if int(time.strftime("%M")) % 5  ==0  and counter[0] != time.strftime("%d/%m/%Y %H:%M"):
-        threading.Thread(target=writetocsv, args=()).start()
-        # writetocsv(counter)
+        threading.Thread(target=write_to_csv, args=()).start()
+        # write_to_csv(counter)
 
     ox = x0 + 20
     oy1, oy2 = y0 + 20 + font_size, y0 + height -20
@@ -294,7 +295,7 @@ def render_gen(args):
         if sifirla:
         #if int(time.strftime("%M")) % 1  ==0  and counter[0] != time.strftime("%d/%m/%Y %H:%M"):
             if not mailgitti:
-                threading.Thread(target=writetocsv, args=()).start()
+                threading.Thread(target=write_to_csv, args=()).start()
                 threading.Thread(target=sendemails, args=()).start()
                 mailgitti=True
                 datenow = time.strftime('%d%m_%H%M')
@@ -306,7 +307,7 @@ def render_gen(args):
                     wr.writerow([counter[5]])
                 counter[3]=0
                 counter[4]=0
-                threading.Thread(target=writetocsv, args=()).start()
+                threading.Thread(target=write_to_csv, args=()).start()
             
             cesits={}
             counter[4] = 0
