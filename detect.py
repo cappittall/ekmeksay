@@ -71,7 +71,6 @@ try:
     with open (counter[5], 'r') as g:
         print('acilan dosya adi', counter[5])
         #10/06/2022 11:02
-        
         for line in g.readlines():
             linelist= line.split(',')
             ckey = linelist[1]
@@ -82,6 +81,10 @@ try:
 except:
     datenow = time.strftime('%d%m_%H%M')
     counter[5] = '/home/mendel/files/b%s_%04d.csv' % (datenow, 1)
+    with open(filenames, 'a') as ff:
+        wr = writer(ff)
+        wr.writerow([counter[5]])
+        
 
 
 def size_em(length):
@@ -99,7 +102,6 @@ def sendemails():
 def write_to_csv():
     if counter[3] > 0:  ## At least should be 1 bread in 1 min
         counter[0] = time.strftime("%d/%m/%Y %H:%M")
-
         with open(counter[5], 'a') as ff:
             #'/home/mendel/besas_' + counter[0][:10].replace('/', '') + '.csv', 'a') as ff:
             wr = writer(ff)
