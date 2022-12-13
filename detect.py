@@ -135,15 +135,16 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
         x, y, w, h = x0_*sx, y0_*sy, (x1_-x0_)*sx, (y1_-y0_)*sy
 
         colorm = 'green' if labelid == 0.0 else 'yellow'
-
-        if y+int(h)  > roi_y and y+int(h) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 :
+        # if labelid == Ekmek add to counter
+        if y+int(h)  > roi_y and y+int(h) < roi_y * 1.015 and trackID not in counted_ids and labelid == 0.0 and len(trdata)>3:
             counter[4] += 1
             counter[3] += 1
             if counter[1] not in cesits: cesits[counter[1]] = 0
             cesits[counter[1]] += 1 
             counted_ids.append(trackID)
             counted_ids.pop(0)
-
+            
+        # if labelid == Ayirac change the bread type
         elif counter[7] < time.time() - (60)  and labelid == 1.0:
             ekmekler.rotate(-1)
             counter[1]= ekmekler[ndx]
