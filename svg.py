@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from collections import Sequence
+# from collections import Sequence
 
 def _clean(k):
     k = k[1:] if k.startswith('_') else k

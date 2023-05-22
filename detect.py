@@ -21,7 +21,7 @@ from csv import writer
 
 import numpy as np
 from numpy.lib.twodim_base import _trilu_dispatcher
-from periphery import GPIO
+# from periphery import GPIO
 from pycoral.adapters import detect
 from pycoral.utils import edgetpu
 
@@ -48,15 +48,29 @@ CSS_STYLES = str(svg.CssStyle({'.back': svg.Style(fill='black',stroke='black', s
               '.large': svg.Style(font_size='1.5em'),\
                 '.bbox': svg.Style(fill_opacity=0.0, stroke_width='0.2em')}))
 
+
 counter = [0,0,0,0,0,0,0,0]
 counted_ids = [0 for i in range(100)]
-filenames = '/home/mendel/files/files.csv'
+filenames = 'files/files.csv'
 
 ekmekler = []
 cesits={}
 #deque([i[:-1] for i in open('ekmekler%s.txt'%fno, 'r') .readlines()])
 ndx=0
+# main.py den gelen datalar !
+version = max([int(i) for i in os.listdir('models') if i.isdigit()])
+MODEL = f'models/{version}/modelv{version}_edgetpu.tflite'
+LABELS = f'models/{version}/ekmek-labels.txt'
 
+
+if os.path.isfile('setups/sets.txt'):
+    vals = open('setups/sets.txt', 'r').readline().split(',')
+    vals[0] = float(vals[0])
+    vals[4] = float(vals[4])
+    vals[5] = bool(vals[5])
+else:
+    vals = [0.40, 'Francala', '/dev/video1:image/jpeg:1920x1080:30/1','EdgeTpuVisionVa', 0.6,  True, 'down', 'Fırınno_02' ]
+print('Model>>', vals)
 #get latest file from disk
 try:
     with open(filenames, 'r') as f:
@@ -80,7 +94,7 @@ try:
         print('counter <<<4>>>', counter[4])
 except:
     datenow = time.strftime('%d%m_%H%M')
-    counter[5] = '/home/mendel/files/b%s_%04d.csv' % (datenow, 1)
+    counter[5] = 'files/b%s_%04d.csv' % (datenow, 1)
     with open(filenames, 'a') as ff:
         wr = writer(ff)
         wr.writerow([counter[5]])
@@ -155,7 +169,6 @@ def overlay(layout, objs, trdata, axis, roi, inference_time, inference_rate, tre
             counter[7] = time.time()
             threading.Thread(target=sendemails, args=()).start()
 
-
         doc += svg.Rect(x=x, y=y, width=w, height=h, style='stroke:%s' % colorm, _class='bbox')
 
         t = svg.Text(x=x, y=y+5, fill='white')
@@ -220,15 +233,17 @@ def render_gen(args):
     tracker = Sort(max_age=20, min_hits=0, iou_threshold=.30)
 
     
-    led = GPIO("/dev/gpiochip2", 13, "out")  # pin 37
-    btn_start_stop = GPIO("/dev/gpiochip4", 13, "in")  # pin 36
-    btn_reset = GPIO("/dev/gpiochip4", 12, "in")  # pin 22
-    btn_up = GPIO("/dev/gpiochip0", 7, "in") # pin 29
+    #led = GPIO("/dev/gpiochip2", 13, "out")  # pin 37
+    #btn_start_stop = GPIO("/dev/gpiochip4", 13, "in")  # pin 36
+    #btn_reset = GPIO("/dev/gpiochip4", 12, "in")  # pin 22
+    #btn_up = GPIO("/dev/gpiochip0", 7, "in") # pin 29
+    
     #btn_down  = GPIO("/dev/gpiochip0", 8, "in") # pin 31 (29-31 yan yana) 
     
 
     fno = args.firinno[-2:]
-    ekmekler= deque([i[:-1] for i in open('/home/mendel/ekmekler%s.txt'%fno, 'r') .readlines()])
+    ekmekler= deque([i[:-1] for i in open('setups/ekmekler%s.txt'%fno, 'r') .readlines()])
+    print(ekmekler)
     ndx = ekmekler.index(args.ekmek)
     counter[1] = ekmekler[ndx]
     counter[2] = args.firinno
@@ -271,14 +286,9 @@ def render_gen(args):
                 x0, y0 = layout.inference_size
                 roi_y = y0 * args.roi 
                 # roi_x = x0 * args.roi 
-                
                 objs =[obj for obj in objs if obj.bbox.ymax >= roi_y*0.90 and 
                                               obj.bbox.ymin <= roi_y*0.95 ]
-
-
                 #objsss= len([obj for obj in objs if obj.bbox.ymax > roi_y * 0.95]) 
-                
-                
                 #Filtering the big or small sized detections.
                 objs = [obj for obj in objs \
                     if args.min_area <= obj.bbox.scale(1.0 / width, 1.0 / height).area <= args.max_area]
@@ -317,7 +327,7 @@ def render_gen(args):
         else: mailgitti = False
        
 
-        draw_overlay = not btn_start_stop.read() 
+        """ draw_overlay = not btn_start_stop.read() 
         sifirla = btn_reset.read()
 
         led.write(btn_start_stop.read())
@@ -327,24 +337,24 @@ def render_gen(args):
         if btn_up.read():
             ekmekler.rotate(1)
             counter[1] = ekmekler[ndx]
-            if counter[1] not in cesits: cesits[counter[1]]=0            
+            if counter[1] not in cesits: cesits[counter[1]]=0   """          
     
     ## Close the lights ##
-    led.write(False)
+    """ led.write(False)
     led.close()
     btn_start_stop.close()
     btn_reset.close()
     btn_up.close()
-    btn_down.close()
+    btn_down.close() """
     
 def add_render_gen_args(parser):
-    parser.add_argument('--model',
-                        help='.tflite model path', required=True)
-    parser.add_argument('--labels',
+    parser.add_argument('--model', default=MODEL,
+                        help='.tflite model path')
+    parser.add_argument('--labels', default=LABELS,
                         help='labels file path')
     parser.add_argument('--top_k', type=int, default=50,
                         help='Max number of objects to detect')
-    parser.add_argument('--threshold', type=float, default=0.5,
+    parser.add_argument('--threshold', type=float, default=float(vals[0]),
                         help='Detection threshold')
     parser.add_argument('--min_area', type=float, default=0.00005, #0.0015,
                         help='Min bounding box area')
@@ -360,16 +370,16 @@ def add_render_gen_args(parser):
                         default='sort',
                         choices=[None, 'sort'])
     parser.add_argument('--roi', type=float,
-                        default=0.9, help='ROI Position (0-1)')
+                        default=float(vals[4]), help='ROI Position (0-1)')
 
     parser.add_argument('--axis', default=False, action="store_true", 
                         help='Axis for cumulative counting (default= x axis)')
 
-    parser.add_argument('--ekmek', default='Francalı', help='Sayilacak ekmek türü')
+    parser.add_argument('--ekmek', default='Francala', help='Sayilacak ekmek türü')
 
-    parser.add_argument('--firinno', default='Fırın_no-01', help='Takip edilen fırın numarası')
+    parser.add_argument('--firinno', default='Fırın_no-02', help='Takip edilen fırın numarası')
 
-    parser.add_argument('--direction', default='down', help='Hangi yöne sayılacak')
+    parser.add_argument('--direction', default=vals[6], help='Hangi yöne sayılacak')
     
 def main():
     run_app(add_render_gen_args, render_gen)

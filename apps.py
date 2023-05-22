@@ -57,7 +57,7 @@ def run_app(add_render_gen_args, render_gen):
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--source',
                         help='/dev/videoN:FMT:WxH:N/D or .mp4 file or image file',
-                        default='/dev/video0:YUY2:1280x720:30/1')
+                        default='/dev/video0:YUY2:1280x720:30/1')   # /dev/video0:YUY2:1280x720:30/1  , /home/cappittall/Videos/ekmeksayma.mp4
     parser.add_argument('--loop',  default=False, action='store_true',
                         help='Loop input video file')
     parser.add_argument('--displaymode', type=Display, choices=Display, default=Display.FULLSCREEN,

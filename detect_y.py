@@ -351,7 +351,7 @@ def add_render_gen_args(parser):
     parser.add_argument('--axis', default=False, action="store_true", 
                         help='Axis for cumulative counting (default= x axis)')
 
-    parser.add_argument('--ekmek', default='Francalı', help='Sayilacak ekmek türü')
+    parser.add_argument('--ekmek', default='Francala', help='Sayilacak ekmek türü')
 
     parser.add_argument('--firinno', default='Fırın_no-01', help='Takip edilen fırın numarası')
 

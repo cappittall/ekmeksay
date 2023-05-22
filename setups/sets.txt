@@ -1,0 +1,1 @@
+0.4,Francala,/home/cappittall/Videos/ekmeksayma.mp4,EdgeTpuVisionVa,0.0,True,down,Fırınno_01

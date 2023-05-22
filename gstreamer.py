@@ -263,12 +263,17 @@ def get_pipeline(source, inference_size, display):
     if fmt:
         layout = make_layout(inference_size, fmt.size)
         #return layout, camera_pipeline(fmt, layout, display)
-        return layout, get_my_pipeline(src_size=fmt.size, appsink_size=inference_size,\
-        videosrc=fmt.device, videofmt=fmt.pixel, headless=False) 
+        pipeline = '''v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! tee name=t
+         t. ! queue max-size-buffers=1 leaky=downstream ! videoconvert ! videoscale ! video/x-raw,width=448,height=336 ! videobox name=box autocrop=true
+            ! video/x-raw,format=RGB,width=448,height=448 ! appsink name=appsink emit-signals=true max-buffers=1 drop=true
+         t. ! queue max-size-buffers=1 leaky=downstream ! videoconvert
+            ! rsvgoverlay name=overlay ! videoconvert ! ximagesink sync=false'''
+        return layout, get_my_pipeline(src_size=fmt.size, appsink_size=inference_size, videosrc=fmt.device, videofmt=fmt.pixel, headless=False) 
 
     filename = os.path.expanduser(source)
     if os.path.isfile(filename):
         info = get_video_info(filename)
+        print('folow1.',filename, info)
         render_size = Size(info.get_width(), info.get_height())
         layout = make_layout(inference_size, render_size)
         return layout, file_pipline(info.is_image(), filename, layout, display)
